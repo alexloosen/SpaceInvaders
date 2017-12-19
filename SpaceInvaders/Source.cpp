@@ -60,7 +60,7 @@ bool update_boxes(Box boxes[])
 				if ((boxes[i].y + boxes[i].delta_y) > gip_win_size_y - 50) return false;
 				boxes[i].y += boxes[i].delta_y;
 			}
-//			delta_x += 0.3;
+			//			delta_x += 0.3;
 			if (delta_wait > 1.2) delta_wait -= 0.035;
 			draw_boxes(boxes);
 			gip_wait(180);

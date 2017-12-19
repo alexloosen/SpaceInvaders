@@ -1,6 +1,7 @@
 # SpaceInvaders
 
 Inspiration: http://www.pacxon4u.com/space-invaders/
+CImg-Documentation: http://cimg.eu/CImg_reference.pdf
 
 Notes:
 

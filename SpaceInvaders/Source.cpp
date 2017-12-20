@@ -88,6 +88,7 @@ void CheckCollisions(Box boxes[], vector<Box> &bullets)
 	int bulletCount = 0, boxCount = 0;
 	// Ist die Kugel oben angekommen => löschen
 	vector<Box> delBullets;
+	gip_stop_updates();
 	for (Box bullet : bullets)
 	{
 		if (bullet.y <= 0)
@@ -96,21 +97,24 @@ void CheckCollisions(Box boxes[], vector<Box> &bullets)
 		}
 		for (int i = 0; i < box_max; i++)
 		{
-			if (boxes[i].x <= bullet.x - bulletRad && boxes[i].x + box_size >= bullet.x)
+			if (boxes[i].x <= bullet.x + bulletRad && boxes[i].x + box_size >= bullet.x - bulletRad)
 			{
 				if (boxes[i].y <= bullet.y && boxes[i].y + box_size >= bullet.y)
 				{
-					bullets.erase(bullets.begin() + bulletCount);
-					boxes[i].draw = false;
-					boxCount = i;
-					break;
+					if (boxes[i].draw)
+					{
+						bullets.erase(bullets.begin() + bulletCount);
+						boxes[i].draw = false;
+						boxCount = i;
+						break;
+					}
 				}
 			}
 		}
 		if (!boxes[boxCount].draw) break;
 		bulletCount++;
 	}
-
+	gip_start_updates();
 	//for (Box delBullet : delBullets)
 	//{
 	//	// Kugeln beim verlassen d. Spielfeldes / Kollision loeschen
@@ -163,9 +167,11 @@ int main()
 		tick++;
 		if (tick % 50 == 0)
 		{
+			gip_stop_updates();
 			keep_going = update_boxes(boxes);//}
+			gip_start_updates();
 		}
-			//gip_wait(delta_wait); // warte 5 Milli-Sekunden
+		//gip_wait(delta_wait); // warte 5 Milli-Sekunden
 		draw_boxes(boxes);
 		draw_bullets(bullets);
 		draw_fighter(fighter);
@@ -187,9 +193,9 @@ int main()
 		{
 			if (tick % 25 == 0)
 			{
-			// schießen (neues Objekt erstellen)
-			Box bullet{ fighter.x + (fighterLength / 2), fighter.y , 10 };
-			bullets.push_back(bullet);
+				// schießen (neues Objekt erstellen)
+				Box bullet{ fighter.x + (fighterLength / 2), fighter.y , 10 };
+				bullets.push_back(bullet);
 			}
 		}
 
